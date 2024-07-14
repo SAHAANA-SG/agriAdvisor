@@ -1,0 +1,76 @@
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+X_train.shape
+X_test.shape
+from sklearn.preprocessing import MinMaxScaler
+Mscaler = MinMaxScaler()
+Mscaler.fit(X_train)
+X_train=Mscaler.transform(X_train)
+X_test=Mscaler.transform(X_test)
+X_train
+from sklearn.preprocessing import StandardScaler
+scaler = StandardScaler()
+scaler.fit(X_train)
+X_train=scaler.transform(X_train)
+X_test=scaler.transform(X_test)
+X_train
+
+from sklearn.linear_model import LogisticRegression
+from sklearn.naive_bayes import GaussianNB
+from sklearn.svm import SVC
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.tree import ExtraTreeClassifier
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import BaggingClassifier
+from sklearn.ensemble import GradientBoostingClassifier
+from sklearn.ensemble import AdaBoostClassifier
+models={
+    'Logistic Regression':LogisticRegression(),
+    "Naive Bayes":GaussianNB(),
+    "SupportVectorMachine":SVC(),
+    "K-Nearest Neighbours":KNeighborsClassifier(),
+    "Decision Tree":DecisionTreeClassifier(),
+    "Extra Trees":ExtraTreeClassifier(),
+    "Random Forest":RandomForestClassifier(),
+    "Bagging":BaggingClassifier(),
+    "Gradient Boosting":GradientBoostingClassifier(),
+    "AdaBoost":AdaBoostClassifier()
+    
+}
+from sklearn.metrics import accuracy_score
+for name,model in models.items():
+    model.fit(X_train,y_train)
+    y_pred = model.predict(X_test)
+    print(f"{name} with accuracy:{accuracy_score(y_test,y_pred)}")
+
+def recommender(N,P,K,temperature,humidity,ph,rainfall):
+    features = np.array([[N,P,K,temperature,humidity,ph,rainfall]])
+    predictor = rfc.predict(features).reshape(1,-1)
+    
+    return predictor[0]
+
+N=20
+P=30
+K=40
+temperature=40.0
+humidity=20
+ph=30
+rainfall=50 
+
+prediction=recommender(N,P,K,temperature,humidity,ph,rainfall)
+
+crop_dict={
+    1:"Rice",2:"Maize",3:"Jute",4:"Cotton",5:"Coconut",6:"Papaya",7:"Orange",8:"Apple",9:"Muskmelon",10:"Watermelon",11:"Grapes",
+    12:"Mango",13:"Banana",14:"Pomegranate",15:"Lentil",16:"Blackgram",17:"Mungbean",18:"Mothbeans",19:"Pigeonpeas",
+    20:"Kidneybeans",21:"Chickpea",22:"Coffee"}
+
+if prediction[0] in crop_dict:
+    crop=crop_dict[prediction[0]]
+    print("{} is a best crop to be cultivated".format(crop))
+    
+else:
+    print("Sorry!We are unable to recommend you a proper crop for this environment!")
+
+import pickle
+pickle.dump(rfc,open('model.pkl','wb'))
